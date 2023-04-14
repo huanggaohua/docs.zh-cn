@@ -326,8 +326,8 @@ SELECT * FROM t;
 - 自增列必须是 BIGINT 类型。
 - 自增列必须为 `NOT NULL`，并且不支持指定默认值。
 - 如果主键模型的表中自增列为 Primary Key，支持 DELETE 操作。如果主键模型的表中自增列不为 Primary Key，支持 DELETE 操作，但是存在如下限制：
-  - DELETE 操作的同时，如果存在一个部分列更新的导入任务，其中只包含 UPSERT 操作。此时 UPSERT 操作如果和DELETE 操作命中了同一行数据，该部分列更新的导入任务可能只会成功一部分。
-  - 如果存在一个部分列更新的导入任务，其中包含若干个对同一行数据的UPSERT、DELETE，如果某个UPSERT操作在DELETE后，可能会导致UPSERT失效。
+  - DELETE 操作的同时，还存在一个部分列更新的导入任务，其中只包含 UPSERT 操作。如果 UPSERT 操作和 DELETE 操作命中了同一行数据，并且 UPSERT 操作在 DELETE 操作后执行，则该 UPSERT 操作可能会失效。
+  - 存在一个部分列更新的导入任务，其中包含若干个对同一行数据的 UPSERT、DELETE 操作。如果某个 UPSERT 操作在 DELETE 操作后执行，则该 UPSERT 操作可能会失效。
 - 不支持使用 ALTER TABLE 添加 `AUTO_INCREMENT` 属性。
 - 存算分离模式暂时不支持该功能。
 - 不支持设置自增列的起始值和自增步长。
