@@ -74,6 +74,9 @@ mysql > SELECT * FROM test_tbl1;
 ```
 
 并且，后续插入新数据时不会影响 StarRocks 新生成的自增列的值。
+> **注意**
+>
+> 因为同时隐式分配和显式指定自增 ID混用可能会破坏自增 ID 的[全局唯一性](#唯一性保证)，建议您不要混用。
 
 ```SQL
 INSERT INTO test_tbl1 (id) VALUES (4);
@@ -95,7 +98,7 @@ mysql > SELECT * FROM test_tbl1;
 
 ### 唯一性保证
 
-在一般情况下，StarRocks 保证自增 ID 是全局唯一的。
+在一般情况下，StarRocks 保证自增 ID 在一张表内是全局唯一的。
 
 但是，如果您混用隐式分配和显式指定自增 ID，则可能会破坏自增 ID 的全局唯一性。因此建议您不要同时隐式分配和显式指定自增 ID。以下是一个简单的示例：
 
