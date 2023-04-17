@@ -26,7 +26,7 @@ CREATE TABLE test_tbl1
 ) 
 PRIMARY KEY (id) 
 DISTRIBUTED BY HASH(id)
-PROPERTIES('replicated_storage' = 'true');
+PROPERTIES("replicated_storage" = "true");
 ```
 
 ### 分配自增列的值
@@ -112,7 +112,7 @@ CREATE TABLE test_tbl2
  ) 
 PRIMARY KEY (id) 
 DISTRIBUTED BY HASH(id)
-PROPERTIES('replicated_storage' = 'true');
+PROPERTIES("replicated_storage" = "true");
 ```
 
 往表 `test_tbl2` 中同时隐式分配和显式指定自增 ID。
@@ -153,7 +153,7 @@ CREATE TABLE test_tbl3
 ) 
 PRIMARY KEY (id)
 DISTRIBUTED BY HASH(id)
-PROPERTIES('replicated_storage' = 'true');
+PROPERTIES("replicated_storage" = "true");
 
 INSERT INTO test_tbl3 VALUES (1, DEFAULT);
 INSERT INTO test_tbl3 VALUES (2, DEFAULT);
@@ -203,7 +203,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
     ) 
     PRIMARY KEY (id, name)
     DISTRIBUTED BY HASH(id)
-    PROPERTIES('replicated_storage' = 'true');
+    PROPERTIES("replicated_storage" = "true");
 
     -- 准备数据
     mysql > INSERT INTO test_tbl4 (id, name, job1, job2) VALUES (0, 0, 1, 1);
@@ -273,7 +273,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
     )
     PRIMARY KEY (id, name)
     DISTRIBUTED BY HASH(id)
-    PROPERTIES('replicated_storage' = 'true');
+    PROPERTIES("replicated_storage" = "true");
 
     -- 准备数据
     mysql > INSERT INTO test_tbl5 VALUES (0, 0, -1, -1);
