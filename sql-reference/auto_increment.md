@@ -324,7 +324,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
 
 ## 使用限制
 
-- 创建具有自增列的表时，必须设置 <code class="language-text">`replicated_storage` = `true`</code>，以确保所有副本具有相同的自增 ID。
+- 创建具有自增列的表时，必须设置 `'replicated_storage' = 'true'`，以确保所有副本具有相同的自增 ID。
 - 每个表最多只能有一个自增列。
 - 自增列必须是 BIGINT 类型。
 - 自增列必须为 `NOT NULL`，并且不支持指定默认值。
