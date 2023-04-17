@@ -76,7 +76,7 @@ mysql > SELECT * FROM test_tbl1 ORDER BY id;
 并且，后续插入新数据时不会影响 StarRocks 新生成的自增列的值。
 > **注意**
 >
-> 因为同时隐式分配和显式指定自增 ID 混用可能会破坏自增 ID 的[全局唯一性](#唯一性保证)，建议您不要混用。
+> 因为同时隐式分配和显式指定自增 ID 可能会破坏自增 ID 的[全局唯一性](#唯一性保证)，建议您不要混用。
 
 ```SQL
 INSERT INTO test_tbl1 (id) VALUES (4);
@@ -328,7 +328,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
 - 每个表最多只能有一个自增列。
 - 自增列必须是 BIGINT 类型。
 - 自增列必须为 `NOT NULL`，并且不支持指定默认值。
-- 您可以从具有自增列的主键模型的表中删除数据。但是如果自增列不为 Primary Key，则您在删除数据时，需要注意如下限制：
+- 您可以从具有自增列的主键模型的表中删除数据。但是如果自增列不为 Primary Key，则您在删除数据时，需要注意以下两个场景中的限制：
   - DELETE 操作的同时，还存在一个部分列更新的导入任务，其中只包含 UPSERT 操作。如果 UPSERT 操作和 DELETE 操作命中了同一行数据，并且 UPSERT 操作在 DELETE 操作后执行，则该 UPSERT 操作可能会失效。
   - 存在一个部分列更新的导入任务，其中包含若干个对同一行数据的 UPSERT、DELETE 操作。如果某个 UPSERT 操作在 DELETE 操作后执行，则该 UPSERT 操作可能会失效。
 - 不支持使用 ALTER TABLE 添加 `AUTO_INCREMENT` 属性。
