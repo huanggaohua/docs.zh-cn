@@ -234,7 +234,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
         -H "column_separator:," \
         -H "partial_update:true" \
         -H "columns:id,name,job2" \
-        -T my_data1.csv -XPUT \
+        -T my_data4.csv -XPUT \
         http://<fe_host>:<fe_http_port>/api/example_db/test_tbl4/_stream_load
     ```
 
@@ -304,7 +304,7 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
         -H "column_separator:," \
         -H "partial_update:true" \
         -H "columns: id,name,job2" \
-        -T my_data2.csv -XPUT \
+        -T my_data5.csv -XPUT \
         http://<fe_host>:<fe_http_port>/api/example_db/test_tbl5/_stream_load
     ```
 
