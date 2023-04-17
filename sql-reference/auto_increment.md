@@ -40,7 +40,7 @@ INSERT INTO test_tbl1 (id) VALUES (1);
 INSERT INTO test_tbl1 (id, number) VALUES (2, DEFAULT);
 
 -- 查看表的数据
-mysql > SELECT * FROM test_tbl1;
+mysql > SELECT * FROM test_tbl1 ORDER BY id;
 +------+--------+
 | id   | number |
 +------+--------+
@@ -62,7 +62,7 @@ mysql > SELECT * FROM test_tbl1;
 INSERT INTO test_tbl1 (id, number) VALUES (3, 100);
 
 -- 查看表的数据
-mysql > SELECT * FROM test_tbl1;
+mysql > SELECT * FROM test_tbl1 ORDER BY id;
 +------+--------+
 | id   | number |
 +------+--------+
@@ -82,7 +82,7 @@ mysql > SELECT * FROM test_tbl1;
 INSERT INTO test_tbl1 (id) VALUES (4);
 
 -- 查看表的数据
-mysql > SELECT * FROM test_tbl1;
+mysql > SELECT * FROM test_tbl1 ORDER BY id;
 +------+--------+
 | id   | number |
 +------+--------+
@@ -126,13 +126,13 @@ INSERT INTO test_tbl2 (id) VALUES (3);
 查询表 `test_tbl2` 的数据。
 
 ```SQL
-mysql > SELECT * FROM test_tbl2;
+mysql > SELECT * FROM test_tbl2 ORDER BY id;
 +------+--------+
 | id   | number |
 +------+--------+
+|    1 |      1 |
 |    2 |      2 |
 |    3 | 100001 |
-|    1 |      1 |
 +------+--------+
 3 rows in set (0.08 sec)
 ```
@@ -165,15 +165,15 @@ INSERT INTO test_tbl3 VALUES (5, DEFAULT);
 表 test_tbl3` 中自增 ID 不是单调递增的。这是因为两个 BE 节点分别缓存了 [1, 100000] 和 [100001, 200000] 范围内的自增 ID，使用多个 INSERT 语句导入数据时，会发送给不同的 BE，由不同 BE 分配自增 ID，因此无法保证自增 ID 的严格单调性。
 
 ```SQL
-mysql > SELECT * FROM test_tbl3;
+mysql > SELECT * FROM test_tbl3 ORDER BY id;
 +------+--------+
 | id   | number |
 +------+--------+
 |    1 |      1 |
-|    5 | 100002 |
 |    2 | 100001 |
-|    4 |      2 |
 |    3 | 200001 |
+|    4 |      2 |
+|    5 | 100002 |
 +------+--------+
 5 rows in set (0.07 sec)
 ```
@@ -211,7 +211,7 @@ mysql > SELECT * FROM test_tbl3;
     {'label':'insert_6af28e77-7d2b-11ed-af6e-02424283676b', 'status':'VISIBLE', 'txnId':'152'}
 
     -- 查询数据
-    mysql > SELECT * FROM test_tbl4 ORDER BY name;
+    mysql > SELECT * FROM test_tbl4 ORDER BY id;
     +------+------+------+------+
     | id   | name | job1 | job2 |
     +------+------+------+------+
@@ -220,7 +220,7 @@ mysql > SELECT * FROM test_tbl3;
     1 row in set (0.01 sec)
     ```
 
-2. 准备 CSV 文件 **my_data1.csv**，用于更新表 `test_tbl4`。 CSV 文件包括自增列的 ID 值，不包含列 `job1` 的值，并且第一行数据的主键存在表 `test_tbl4` 中，第二行的主键不存在。
+2. 准备 CSV 文件 **my_data4.csv**，用于更新表 `test_tbl4`。 CSV 文件包括自增列的 ID 值，不包含列 `job1` 的值，并且第一行数据的主键存在表 `test_tbl4` 中，第二行的主键不存在。
 
     ```Plaintext
     0,0,99
@@ -241,7 +241,7 @@ mysql > SELECT * FROM test_tbl3;
 4. 查询更新后的表。第一条数据原先已经存在表 `test_tbl4` 中，并且列 `job1` 保持原先的值。第二条数据是新插入的数据，由于列 `job1` 没有定义默认值，因此部分列更新框架会直接将此列的值设置为 `0`。
 
     ```SQL
-    mysql > SELECT * FROM test_tbl4 ORDER BY name;
+    mysql > SELECT * FROM test_tbl4 ORDER BY id;
     +------+------+------+------+
     | id   | name | job1 | job2 |
     +------+------+------+------+
@@ -280,7 +280,7 @@ mysql > SELECT * FROM test_tbl3;
     Query OK, 1 row affected (0.04 sec)
     {'label':'insert_458d9487-80f6-11ed-ae56-aa528ccd0ebf', 'status':'VISIBLE', 'txnId':'94'}
 
-    mysql > SELECT * FROM test_tbl5 ORDER BY name;
+    mysql > SELECT * FROM test_tbl5 ORDER BY id;
     +------+------+------+------+
     | id   | name | job1 | job2 |
     +------+------+------+------+
@@ -289,7 +289,7 @@ mysql > SELECT * FROM test_tbl3;
     1 row in set (0.01 sec)
     ```
 
-2. 准备 CSV 文件 **my_data2.csv**，用于更新表 `test_tbl5`。CSV 文件不包含自增列 `job1` 的值，并且第一行数据的主键存在于表中，第二、三行数据的主键不存在。
+2. 准备 CSV 文件 **my_data5.csv**，用于更新表 `test_tbl5`。CSV 文件不包含自增列 `job1` 的值，并且第一行数据的主键存在于表中，第二、三行数据的主键不存在。
 
     ```Plaintext
     0,0,99
@@ -311,7 +311,7 @@ mysql > SELECT * FROM test_tbl3;
 4. 查询更新后的表。第一条数据已经存在表 `test_tbl5` 中，自增列 `job1` 保持原先的 ID 值。第二、三条数据是新插入的数据，自增列 `job1` 的 ID 值由 StarRocks 自动生成。
 
     ```SQL
-    mysql > SELECT * FROM test_tbl5 ORDER BY name;
+    mysql > SELECT * FROM test_tbl5 ORDER BY id;
     +------+------+--------+------+
     | id   | name | job1   | job2 |
     +------+------+--------+------+
@@ -324,7 +324,7 @@ mysql > SELECT * FROM test_tbl3;
 
 ## 使用限制
 
-- 创建具有自增列的表时，必须设置 ``replicated_storage` = `true``，以确保所有副本具有相同的自增 ID。
+- 创建具有自增列的表时，必须设置 <code class="language-text">`replicated_storage` = `true`</code>，以确保所有副本具有相同的自增 ID。
 - 每个表最多只能有一个自增列。
 - 自增列必须是 BIGINT 类型。
 - 自增列必须为 `NOT NULL`，并且不支持指定默认值。
