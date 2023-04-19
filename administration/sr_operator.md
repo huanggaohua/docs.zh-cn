@@ -295,7 +295,7 @@ Kubernetes 还支持使用 `behavior`，根据业务场景定制扩缩容行为�
       target:
         averageUtilization: 60
   ```
-  
+
 ## 常见问题
 
 - **问题描述**：执行 `kubectl apply -f xxx` 部署定制资源 StarRocksCluster 时，报错 `The CustomResourceDefinition "starrocksclusters.starrocks.com" is invalid: metadata.annotations: Too long: must have at most 262144 bytes`。
