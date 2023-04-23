@@ -2,16 +2,16 @@
 
 [Helm](https://helm.sh/) 是 Kubernetes 的包管理工具。[Helm Chart](https://helm.sh/docs/topics/charts/) 是 Helm 包，包含在 Kubernetes 集群上运行应用程序所需的所有资源定义。本文介绍如何在 Kubernetes 集群上使用 Helm 自动化部署 StarRocks 集群。
 
-> **注意**
->
-> 不建议在生产环境中使用 Helm 部署 StarRocks 集群。
-
 ## 环境准备
 
 - [创建 Kubernetes 集群](../sr_operator#创建-kubernetes-集群)。
 - [安装 Helm](https://helm.sh/docs/intro/quickstart/)。
 
 ## 部署操作
+
+> **注意**
+>
+> 不建议在生产环境中使用 Helm 部署 StarRocks 集群。
 
 1. 添加 StarRocks 的 Helm Chart Repo。Helm Chart 包括 StarRocks Operator 和定制资源 StarRocksCluster 的定义。
    1. 添加 Helm Chart Repo。
@@ -63,18 +63,18 @@
         helm install -f my-values.yaml starrocks starrocks-community/kube-starrocks
         ```
 
-   3. 部署需要一定时间。期间，您可以根据上述部署命令返回结果中的提示命令查询部署状态，默认的提示命令如下：
+      部署需要一定时间。期间，您可以根据上述部署命令返回结果中的提示命令查询部署状态，默认的提示命令如下：
 
-   4. ```Bash
+      ```Bash
       $ kubectl --namespace default get starrockscluster -l "cluster=kube-starrocks"
       # 状态显示为 running，则表示已经成功部署。
       NAME             FESTATUS   CNSTATUS   BESTATUS
       kube-starrocks   running               running
       ```
 
-   5. 您也可以执行 `kubectl get pods` 查看部署状态。如果所有 Pod 处于 `Running` 状态且 Pod 内所有容器都 `READY`，则表示已经成功部署。
+     您也可以执行 `kubectl get pods` 查看部署状态。如果所有 Pod 处于 `Running` 状态且 Pod 内所有容器都 `READY`，则表示已经成功部署。
 
-   6. ```Bash
+      ```Bash
       $ kubectl get pods
       NAME                                       READY   STATUS    RESTARTS   AGE
       kube-starrocks-be-0                        1/1     Running   0          2m50s
@@ -97,6 +97,6 @@
 - 如果需要更新 StarRocks Operator 和 StarRocks 集群的配置，请参见 [Helm Upgrade](https://helm.sh/docs/helm/helm_upgrade/)。
 - 如果需要卸载 StarRocks Operator 和 StarRocks 集群，可以执行如下命令：
 
-```Bash
-helm uninstall starrocks
-```
+    ```Bash
+    helm uninstall starrocks
+    ```
