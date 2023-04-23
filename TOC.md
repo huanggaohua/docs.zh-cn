@@ -17,7 +17,7 @@
 + 表设计
   + [理解表设计](/table_design/StarRocks_table_design.md)
   + 数据模型
-    + [数据模型](/table_design/table_types/table_types.md)
+    + [数据模型概览](/table_design/table_types/table_types.md)
     + [明细模型](/table_design/table_types/duplicate_key_table.md)
     + [聚合模型](/table_design/table_types/aggregate_table.md)
     + [更新模型](/table_design/table_types/unique_key_table.md)
