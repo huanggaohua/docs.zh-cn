@@ -100,3 +100,7 @@
     ```Bash
     helm uninstall starrocks
     ```
+
+**在 Artifict Hub 上搜索 StarRocks 维护的 Helm Chart**
+
+请参见 [kube-starrocks](https://artifacthub.io/packages/helm/fslstarrocks/kube-starrocks).
