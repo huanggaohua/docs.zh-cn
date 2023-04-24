@@ -159,14 +159,14 @@ flink-connector-starrocks 的内部实现是通过缓存并批量由 Stream Load
 | table-name                       | YES      | NONE          | String   | StarRocks 目标数据表的名称。                                 |
 | username                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户名。该账号需具备 StarRocks 目标数据表的写权限。有关用户权限的说明，请参见[用户权限](https://docs.starrocks.io/zh-cn/latest/administration/User_privilege)。 |
 | password                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户密码。                          |
-| sink.semantic                    | NO       | at-least-once | String   | 数据 sink 至 StarRocks 的语义。 - 'at-least-once'： 至少一次。 - 'exactly-once'：精确一次。<br> **注意**<br>在本场景下，当 Flink 触发一个检查点时，进行 flush，因此此时参数 sink.buffer-flush.* 不生效。 |
+| sink.semantic                    | NO       | at-least-once | String   | 数据 sink 至 StarRocks 的语义。<br><ul><li>'at-least-once'： 至少一次。</li><li>'exactly-once'：精确一次。</li></ul> **注意**<br>在本场景下，当 Flink 触发一个检查点时，进行 flush，因此此时参数 sink.buffer-flush.* 不生效。 |
 | sink.version                     | NO       | AUTO          | String   | 实现 sink 的 exactly-once 语义的版本，仅适用于 1.2.4 版本及以上的 flink-connector-starrocks。 <br> <ul><li>`V2`：V2 版本，表示使用 [Stream Load 事务接口](./Flink-connector-starrocks.md)。StarRocks 2.4及以上版本支持该接口。</li><li>`V1`：V1 版本，表示使用 Stream Load 非事务接口。</li><li>`AUTO`： 由 flink-connector-starrocks 自动选择版本。如果  flink-connector-starrocks 为 1.2.4 及以上版本，StarRocks 为 2.4 及以上版本，则使用 Stream Load 事务接口。反之，则使用 Stream Load 非事务接口。</li></ul>|
 | sink.buffer-flush.max-bytes      | NO       | 94371840(90M) | String   | Flush 前单个 Stream Load 作业积攒的序列化数据的大小上限。取值范围：[64MB, 10GB]。 |
 | sink.buffer-flush.max-rows       | NO       | 500000        | String   | Flush 前单个 Stream Load 作业积攒的数据行数上限。取值范围：[64000, 5000000]。 |
 | sink.buffer-flush.interval-ms    | NO       | 300000        | String   | Flush 的时间间隔，取值范围：[1000, 3600000]，单位：ms。      |
 | sink.max-retries                 | NO       | 3             | String   | 单个 Stream Load 作业失败后的最大重试次数。超过该数量上限，则数据导入任务报错。取值范围：[0, 10]。 |
 | sink.connect.timeout-ms          | NO       | 1000          | String   | 连接 `load-url` 的超时时间。取值范围：[100, 60000]。单位：ms。 |
-| sink.properties.*                | NO       | NONE          | String   | Stream Load 作业的参数，例如 'sink.properties.columns'，支持的参数和说明，请参见 [STREAM LOAD](https://docs.starrocks.io/zh-cn/latest/sql-reference/sql-statements/data-manipulation/STREAM LOAD)。 > **说明** > > 自 2.4 版本起，flink-connector-starrocks 支持主键模型的表进行部分更新。 |
+| sink.properties.*                | NO       | NONE          | String   | Stream Load 作业的参数，例如 'sink.properties.columns'，支持的参数和说明，请参见 [STREAM LOAD](../sql-reference/sql-statements/data-manipulation/STREAM%20LOAD.md)。 <br> **说明** <br> 自 2.4 版本起，flink-connector-starrocks 支持主键模型的表进行部分更新。 |
 | sink.properties.format           | NO       | CSV           | String   | Stream Load 导入时的数据格式。取值范围：CSV 或者 JSON。      |
 | sink.properties.ignore_json_size | NO       | FALSE         | String   | ignore the batching size (100MB) of json data                |
 | sink.properties.timeout          | NO       | 600           | String   | 当 `sink.semantic` 为 `exactly-once`，使用Stream Load 事务接口时，Stream Load 作业的超时时间。单位：秒。 在 Flink checkpoint 触发后，一个新的 Stream Load 事务开始，并在下一个 checkpoint 触发时该事务提交。因此您需要确保该值大于 Flink checkpoint 间隔时间，否则 Flink 作业会因为事务超时而失败。 |
