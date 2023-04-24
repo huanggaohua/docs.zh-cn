@@ -150,26 +150,26 @@ flink-connector-starrocks 的内部实现是通过缓存并批量由 Stream Load
 
 其中Sink选项如下：
 
-| Option | Required | Default | Type | Description |
-|  :-----:  | :-----:  | :-----:  | :-----:  | :-----  |
-| connector | YES | NONE | String |**starrocks**|
-| jdbc-url | YES | NONE | String | this will be used to execute queries in starrocks. |
-| load-url | YES | NONE | String | **fe_ip:http_port;fe_ip:http_port** separated with '**;**', which would be used to do the batch sinking. |
-| database-name | YES | NONE | String | starrocks database name |
-| table-name | YES | NONE | String | starrocks table name |
-| username | YES | NONE | String | starrocks connecting username |
-| password | YES | NONE | String | starrocks connecting password |
-| sink.semantic | NO | **at-least-once** | String | **at-least-once** or **exactly-once**(**flush at checkpoint only** and options like **sink.buffer-flush.*** won't work either). |
-| sink.version | NO | AUTO | String | The version of implementaion for sink exactly-once. Only availible for connector 1.2.4+. If `V2`, use StarRocks' stream load transaction interface which requires StarRocks 2.4+. If `V1`, use stream load non-transaction interface. If `AUTO`, connector will choose the stream load transaction interface automatically if the StarRocks supports the feature, otherwise choose non-transaction interface. |
-| sink.buffer-flush.max-bytes | NO | 94371840(90M) | String | the max batching size of the serialized data, range: **[64MB, 10GB]**. |
-| sink.buffer-flush.max-rows | NO | 500000 | String | the max batching rows, range: **[64,000, 5000,000]**. |
-| sink.buffer-flush.interval-ms | NO | 300000 | String | the flushing time interval, range: **[1000ms, 3600000ms]**. |
-| sink.max-retries | NO | 3 | String | max retry times of the stream load request, range: **[0, 10]**. |
-| sink.connect.timeout-ms | NO | 1000 | String | Timeout in millisecond for connecting to the `load-url`, range: **[100, 60000]**. |
-| sink.properties.format|  NO | CSV | String | The file format of data loaded into starrocks. Valid values: **CSV** and **JSON**. Default value: **CSV**. |
-| sink.properties.* | NO | NONE | String | the stream load properties like **'sink.properties.columns' = 'k1, k2, k3'**,details in [STREAM LOAD](../sql-reference/sql-statements/data-manipulation/STREAM%20LOAD.md). Since 2.4, the flink-connector-starrocks supports partial updates for Primary Key model. |
-| sink.properties.ignore_json_size | NO |false| String | ignore the batching size (100MB) of json data |
-| sink.properties.timeout | NO |600| String | Timeout for transaction stream load when you use exactly-once sink. Unit: seconds. A new transaction will begin after a Flink checkpoint is triggered, and be committed when the next checkpoint is triggered, so you should set the value larger than the Flink checkpoint interval, otherwise the Flink job will fail because of transaction timeout .   |
+| 参数                             | 是否必填 | 默认值        | 数据类型 | 描述                                                         |
+| -------------------------------- | -------- | ------------- | -------- | ------------------------------------------------------------ |
+| connector                        | 是       | NONE          | String   | 固定设置为 `starrocks`。                                     |
+| jdbc-url                         | YES      | NONE          | String   | FE 节点的连接地址，用于访问 FE 节点上的 MySQL 客户端。格式如下：`jdbc:mysql://<fe_host>:<fe_query_port>`。默认端口号为 `9030`。 |
+| load-url                         | YES      | NONE          | String   | FE 节点的连接地址，用于通过 Web 服务器访问 FE 节点。 格式如下：`<fe_host>:<fe_http_port>`。默认端口号为 `8030`。多个地址之间用逗号 (,) 分隔。例如`192.168.xxx.xxx:8030`,`192.168.xxx.xxx:8030`。 |
+| database-name                    | YES      | NONE          | String   | StarRocks 目标数据库的名称。                                 |
+| table-name                       | YES      | NONE          | String   | StarRocks 目标数据表的名称。                                 |
+| username                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户名。该账号需具备 StarRocks 目标数据表的写权限。有关用户权限的说明，请参见[用户权限](https://docs.starrocks.io/zh-cn/latest/administration/User_privilege)。 |
+| password                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户密码。                          |
+| sink.semantic                    | NO       | at-least-once | String   | 数据 sink 至 StarRocks 的语义。 - 'at-least-once'： 至少一次。 - 'exactly-once'：精确一次。 >  注意 > > 在本场景下，当 Flink 触发一个检查点时，进行 flush，因此此时参数 sink.buffer-flush.* 不生效。 |
+| sink.version                     | NO       | AUTO          | String   | 实现 sink 的 exactly-once 语义的版本，仅适用于 1.2.4 版本及以上的 flink-connector-starrocks。 - `V2`：V2 版本，表示使用 [Stream Load事务接口](./Flink-connector-starrocks.md)。StarRocks 2.4及以上版本支持该接口。 - `V1`：V1 版本，表示使用 Stream Load 非事务接口。 - `AUTO`： 由 flink-connector-starrocks 自动选择版本。如果  flink-connector-starrocks 为 1.2.4 及以上版本，StarRocks 为 2.4 及以上版本，则使用 Stream Load 事务接口。反之，则使用 Stream Load 非事务接口。 |
+| sink.buffer-flush.max-bytes      | NO       | 94371840(90M) | String   | Flush 前单个 Stream Load 作业积攒的序列化数据的大小上限。取值范围：[64MB, 10GB]。 |
+| sink.buffer-flush.max-rows       | NO       | 500000        | String   | Flush 前单个 Stream Load 作业积攒的数据行数上限。取值范围：[64000, 5000000]。 |
+| sink.buffer-flush.interval-ms    | NO       | 300000        | String   | Flush 的时间间隔，取值范围：[1000, 3600000]，单位：ms。      |
+| sink.max-retries                 | NO       | 3             | String   | 单个 Stream Load 作业失败后的最大重试次数。超过该数量上限，则数据导入任务报错。取值范围：[0, 10]。 |
+| sink.connect.timeout-ms          | NO       | 1000          | String   | 连接 `load-url` 的超时时间。取值范围：[100, 60000]。单位：ms。 |
+| sink.properties.*                | NO       | NONE          | String   | Stream Load 作业的参数，例如 'sink.properties.columns'，支持的参数和说明，请参见 [STREAM LOAD](https://docs.starrocks.io/zh-cn/latest/sql-reference/sql-statements/data-manipulation/STREAM LOAD)。 > **说明** > > 自 2.4 版本起，flink-connector-starrocks 支持主键模型的表进行部分更新。 |
+| sink.properties.format           | NO       | CSV           | String   | Stream Load 导入时的数据格式。取值范围：CSV 或者 JSON。      |
+| sink.properties.ignore_json_size | NO       | FALSE         | String   | ignore the batching size (100MB) of json data                |
+| sink.properties.timeout          | NO       | 600           | String   | 当 `sink.semantic` 为 `exactly-once`，使用Stream Load 事务接口时，Stream Load 作业的超时时间。单位：秒。 在 Flink checkpoint 触发后，一个新的 Stream Load 事务开始，并在下一个 checkpoint 触发时该事务提交。因此您需要确保该值大于 Flink checkpoint 间隔时间，否则 Flink 作业会因为事务超时而失败。 |
 
 ## Flink 与 StarRocks 的数据类型映射关系
 
