@@ -154,13 +154,13 @@ flink-connector-starrocks 的内部实现是通过缓存并批量由 Stream Load
 | -------------------------------- | -------- | ------------- | -------- | ------------------------------------------------------------ |
 | connector                        | 是       | NONE          | String   | 固定设置为 `starrocks`。                                     |
 | jdbc-url                         | YES      | NONE          | String   | FE 节点的连接地址，用于访问 FE 节点上的 MySQL 客户端。格式如下：`jdbc:mysql://<fe_host>:<fe_query_port>`。默认端口号为 `9030`。 |
-| load-url                         | YES      | NONE          | String   | FE 节点的连接地址，用于通过 Web 服务器访问 FE 节点。 格式如下：`<fe_host>:<fe_http_port>`。默认端口号为 `8030`。多个地址之间用逗号 (,) 分隔。例如`192.168.xxx.xxx:8030`,`192.168.xxx.xxx:8030`。 |
+| load-url                         | YES      | NONE          | String   | FE 节点的连接地址，用于通过 Web 服务器访问 FE 节点。 格式如下：`<fe_host>:<fe_http_port>`。默认端口号为 `8030`。多个地址之间用逗号 (,) 分隔。例如 `192.168.xxx.xxx:8030,192.168.xxx.xxx:8030`。 |
 | database-name                    | YES      | NONE          | String   | StarRocks 目标数据库的名称。                                 |
 | table-name                       | YES      | NONE          | String   | StarRocks 目标数据表的名称。                                 |
 | username                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户名。该账号需具备 StarRocks 目标数据表的写权限。有关用户权限的说明，请参见[用户权限](https://docs.starrocks.io/zh-cn/latest/administration/User_privilege)。 |
 | password                         | YES      | NONE          | String   | 用于访问 StarRocks 集群的用户密码。                          |
-| sink.semantic                    | NO       | at-least-once | String   | 数据 sink 至 StarRocks 的语义。 - 'at-least-once'： 至少一次。 - 'exactly-once'：精确一次。 >  注意 > > 在本场景下，当 Flink 触发一个检查点时，进行 flush，因此此时参数 sink.buffer-flush.* 不生效。 |
-| sink.version                     | NO       | AUTO          | String   | 实现 sink 的 exactly-once 语义的版本，仅适用于 1.2.4 版本及以上的 flink-connector-starrocks。 - `V2`：V2 版本，表示使用 [Stream Load事务接口](./Flink-connector-starrocks.md)。StarRocks 2.4及以上版本支持该接口。 - `V1`：V1 版本，表示使用 Stream Load 非事务接口。 - `AUTO`： 由 flink-connector-starrocks 自动选择版本。如果  flink-connector-starrocks 为 1.2.4 及以上版本，StarRocks 为 2.4 及以上版本，则使用 Stream Load 事务接口。反之，则使用 Stream Load 非事务接口。 |
+| sink.semantic                    | NO       | at-least-once | String   | 数据 sink 至 StarRocks 的语义。 - 'at-least-once'： 至少一次。 - 'exactly-once'：精确一次。<br> **注意**<br>在本场景下，当 Flink 触发一个检查点时，进行 flush，因此此时参数 sink.buffer-flush.* 不生效。 |
+| sink.version                     | NO       | AUTO          | String   | 实现 sink 的 exactly-once 语义的版本，仅适用于 1.2.4 版本及以上的 flink-connector-starrocks。 <br> <ul><li>`V2`：V2 版本，表示使用 [Stream Load 事务接口](./Flink-connector-starrocks.md)。StarRocks 2.4及以上版本支持该接口。</li><li>`V1`：V1 版本，表示使用 Stream Load 非事务接口。</li><li>`AUTO`： 由 flink-connector-starrocks 自动选择版本。如果  flink-connector-starrocks 为 1.2.4 及以上版本，StarRocks 为 2.4 及以上版本，则使用 Stream Load 事务接口。反之，则使用 Stream Load 非事务接口。</li></ul>|
 | sink.buffer-flush.max-bytes      | NO       | 94371840(90M) | String   | Flush 前单个 Stream Load 作业积攒的序列化数据的大小上限。取值范围：[64MB, 10GB]。 |
 | sink.buffer-flush.max-rows       | NO       | 500000        | String   | Flush 前单个 Stream Load 作业积攒的数据行数上限。取值范围：[64000, 5000000]。 |
 | sink.buffer-flush.interval-ms    | NO       | 300000        | String   | Flush 的时间间隔，取值范围：[1000, 3600000]，单位：ms。      |
