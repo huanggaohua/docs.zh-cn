@@ -72,7 +72,7 @@
       kube-starrocks   running               running
       ```
 
-     您也可以执行 `kubectl get pods` 查看部署状态。如果所有 Pod 处于 `Running` 状态且 Pod 内所有容器都 `READY`，则表示已经成功部署。
+      您也可以执行 `kubectl get pods` 查看部署状态。如果所有 Pod 处于 `Running` 状态且 Pod 内所有容器都 `READY`，则表示已经成功部署。
 
       ```Bash
       $ kubectl get pods
