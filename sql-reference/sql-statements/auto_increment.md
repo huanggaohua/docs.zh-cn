@@ -337,4 +337,4 @@ mysql > SELECT * FROM test_tbl3 ORDER BY id;
 
 ## Keywords
 
-auto_increment, auto increment
+AUTO_INCREMENT, AUTO INCREMENT
