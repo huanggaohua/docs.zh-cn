@@ -16,7 +16,11 @@ StarRocks 中的物化视图是一种特殊的物理表，其中保存着基于�
 
   物化视图的驱动表。
 
+<<<<<<< HEAD
 - **查询重写**
+=======
+  对于 StarRocks 的异步物化视图，基表可以是 [Default catalog](../data_source/catalog/default_catalog.md) 中的内部表、外部数据目录中的表（自 2.5 版本起支持），甚至是已有的异步物化视图（自 2.5 版本起支持）。StarRocks 支持在所有 [StarRocks 表类型](../table_design/table_types/table_types.md) 上创建异步物化视图。
+>>>>>>> 44d6b66b (split data model and update related proper-names (#5122))
 
   查询重写是指当对包含物化视图的基表进行查询时，系统会自动判断能否通过查询物化视图来得到结果。如果可以，则避免了聚合或连接操作，而直接从已经计算好的物化视图中读取数据。
 
