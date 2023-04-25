@@ -2,11 +2,11 @@
 
 ## 2.3.12
 
-发布日期： 2023 年 4 月 24 日
+发布日期： 2023 年 4 月 25 日
 
 ### 功能优化
 
-如果表达式返回值可以合法转换 Boolean 值时，则会对其进行隐式转换。[# 21792](https://github.com/StarRocks/starrocks/pull/21792)
+如果表达式的返回值可以合法转换为 Boolean 值，则会对其进行隐式转换。[# 21792](https://github.com/StarRocks/starrocks/pull/21792)
 
 ### 问题修复
 
@@ -21,7 +21,7 @@
 - `INSERT INTO XXX SELECT` 返回结果显示的数据行数和 `SELECT COUNT(*) FROM XXX` 返回结果显示的数据行数不一致。[# 20084](https://github.com/StarRocks/starrocks/issues/20084)
 - 如果子查询使用窗口函数，父查询使用 GROUP BY 子句，则查询结果无法聚合。[# 19725](https://github.com/StarRocks/starrocks/issues/19725)
 - 启动 BE 后，BE 进程存在但是 BE 所有端口无法开启。[# 19347](https://github.com/StarRocks/starrocks/pull/19347)
-- 如果磁盘 IO 利用率过高，导致主键模型的表的事务提交过慢，则查询该表时可能会返回报错 `backend not found`。[# 18835](https://github.com/StarRocks/starrocks/issues/18835)
+- 如果磁盘 IO 利用率过高，导致主键模型表的事务提交过慢，则查询该表时可能会返回报错 `backend not found`。[# 18835](https://github.com/StarRocks/starrocks/issues/18835)
 
 ## 2.3.11
 
