@@ -135,7 +135,7 @@ GROUP BY order_id;
 
 ### 基于查询语句创建异步物化视图
 
-您可以通过 [CREATE MATERIALIZED VIEW](../sql-reference/sql-statements/data-definition/CREATE%20MATERIALIZED%20VIEW.md) 语句为特定查询语句创建物化视图。
+您可以通过 [CREATE MATERIALIZED VIEW](../sql-reference/sql-statements/data-definition/CREATE%20MATERIALIZED%20VIEW) 语句为特定查询语句创建物化视图。
 
 以下示例根据上述查询语句，基于表 `goods` 和表 `order_list` 创建一个“以订单 ID 为分组，对订单中所有商品价格求和”的异步物化视图，并设定其刷新方式为异步，以相隔一天的频率自动刷新。
 
